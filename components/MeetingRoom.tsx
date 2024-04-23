@@ -20,8 +20,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-//import EndCallButton from './EndCallButton';
-import { cn } from '@/lib/utils';
 import EndCallButton from './EndCallButton';
 
 type CallLayoutType = 'grid' | 'speaker-left' | 'speaker-right';
