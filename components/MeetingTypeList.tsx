@@ -9,6 +9,7 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "./ui/use-toast";
 import { Textarea } from "./ui/textarea";
 import ReactDatePicker from "react-datepicker";
+import { Input } from "./ui/input";
 
 export default function MeetingTypeList() {
 
@@ -142,6 +143,21 @@ export default function MeetingTypeList() {
                     />
                 )
             }
+
+            <MeetingModal
+                isOpen={meetingState === 'isJoiningMeeting'}
+                onClose={() => setMeetingState(undefined)}
+                title="Type the link here"
+                className="text-center"
+                buttonText="Join Meeting"
+                handleClick={() => router.push(values.link)}
+            >
+                <Input
+                    placeholder="Meeting link"
+                    onChange={(e) => setValues({ ...values, link: e.target.value })}
+                    className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
+            </MeetingModal>
 
             <MeetingModal
                 isOpen={meetingState === 'isInstantMeeting'}
