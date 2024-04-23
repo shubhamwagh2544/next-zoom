@@ -3,8 +3,9 @@
 import useGetCalls from "@/hooks/useGetCalls"
 import { Call, CallRecording } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MeetingCard from "./MeetingCard";
+import Loader from "./Loader";
 
 export default function CallList({ type }: { type: 'upcoming' | 'ended' | 'recordings' }) {
 
@@ -38,11 +39,31 @@ export default function CallList({ type }: { type: 'upcoming' | 'ended' | 'recor
         }
     }
 
+    useEffect(() => {
+        const fetchRecordings = async () => {
+            const callData = await Promise.all(
+                callRecordings?.map((meeting) => meeting.queryRecordings()) ?? [],
+            );
+
+            const recordings = callData
+                .filter((call) => call.recordings.length > 0)
+                .flatMap((call) => call.recordings);
+
+            setRecordings(recordings);
+        };
+
+        if (type === 'recordings') {
+            fetchRecordings();
+        }
+    }, [type, callRecordings]);
+
+    if (isLoading) return <Loader />;
+
     const calls = getCalls();
     const noCallsMessage = getNoCallsMessages();
 
     return (
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
             {calls && calls.length > 0 ? (
                 calls.map((meeting: Call | CallRecording) => (
                     <MeetingCard
